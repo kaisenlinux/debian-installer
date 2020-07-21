@@ -159,6 +159,8 @@ Build-Depends:
 #		https://lists.debian.org/debian-devel-announce/2017/08/msg00005.html
 	fontconfig,
 #		Used to generate a font cache through fc-cache, for gtk flavours
+Vcs-Browser: https://gitlab.com/kaisenlinux/packages/debian-installer
+Vcs-Git: https://gitlab.com/kaisenlinux/packages/debian-installer.git
 
 Package: debian-installer
 Architecture: any

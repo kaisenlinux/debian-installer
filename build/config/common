@@ -11,7 +11,7 @@
 
 # Default kernel ABI version to use. Append a kernel flavour to
 # produce KERNELVERSION.
-LINUX_KERNEL_ABI ?= 5.6.0-kaisen1
+LINUX_KERNEL_ABI ?= 5.7.0-kaisen1
 
 # Always "di" these days
 KERNEL_FLAVOUR ?= di
@@ -44,7 +44,7 @@ MIRROR = http://kaisendeb.lf.je/kaisen
 DPKG_UNPACK_OPTIONS = --force-overwrite
 
 # The codename of the Debian release that should be installed by default.
-DEBIAN_RELEASE = $(USE_UDEBS_FROM)
+DEBIAN_RELEASE = kaisen-rolling
 
 # The version (number and codename) of the Debian release targeted by the
 # installation images. (Only the codename is used while the version number
@@ -97,7 +97,7 @@ TYPE = $(MEDIUM)
 
 # Used to write a /etc/lsb-release file in the installer initrd.
 LSB_DISTRIB_ID=Kaisen
-LSB_DISTRIB_DESCRIPTION="Kaisen $(shell uname -o) installer"
+LSB_DISTRIB_DESCRIPTION="Kaisen GNU/Linux installer"
 # Inlude the build date of the installer in here.
 LSB_DISTRIB_RELEASE="Kaisen GNU/Linux - installer build $(BUILD_DATE)"
 
