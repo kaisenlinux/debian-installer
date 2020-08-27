@@ -1,3 +1,9 @@
+debian-installer (20200827+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuilding to adding Kaisen Linux 5.7.17
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisen-linux.org>  Thu, 27 Aug 2020 13:09:40 +0200
+
 debian-installer (20200808+kaisen1) kaisen-devel; urgency=medium
 
   * Rebuilding to adding Kaisen Linux 5.7.10
