@@ -1,3 +1,9 @@
+debian-installer (20200921+kaisen1) kaisen-packages; urgency=medium
+
+  * Explicitly add isofs-modules to the package lists
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisen-linux.org>  Mon, 21 Sep 2020 00:57:59 +0200
+
 debian-installer (20200920+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuilding to adding Kaisen Linux 5.8.7 and update rootskel-gtk theme
