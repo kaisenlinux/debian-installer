@@ -1,3 +1,9 @@
+debian-installer (20201011+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 5.8.10
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisen-linux.org>  Sun, 11 Oct 2020 20:42:14 +0200
+
 debian-installer (20200921+kaisen1) kaisen-packages; urgency=medium
 
   * Explicitly add isofs-modules to the package lists
