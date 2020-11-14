@@ -1,3 +1,9 @@
+debian-installer (20201114+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 5.9.6
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisen-linux.org>  Sat, 14 Nov 2020 20:11:02 +0200
+
 debian-installer (20201101+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 5.9.1
