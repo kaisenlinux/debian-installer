@@ -1,3 +1,101 @@
+debian-installer (20201206+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 5.9.11
+  * Import new upstream release
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisen-linux.org>  Sun, 06 Dec 2020 04:12:18 +0200
+
+debian-installer (20201202) unstable; urgency=medium
+
+  [ Cyril Brulebois ]
+  * Bump Linux kernel ABI to 5.9.0-3
+  * Drop fontconfig tweaks introduced in version 20170828 (See: #873462):
+     - Full hinting support was removed upstream, in pango 1.44.
+     - Forcing truetype:interpreter-version=35 through FREETYPE_PROPERTIES
+       now leads to arguably worse rendering than with default settings.
+  * With or without the aforementioned changes, the rendering looks much
+    worse than it used to (until Debian Installer Bullseye Alpha 3), due
+    to a behavioral change in pango. Since it affects default fonts, and
+    not only in the installer's context, one might have hoped for a fix
+    at some point but that doesn't seem to be happening. We might try to
+    use different fonts to try and dodge this issue… Until then, here
+    are some pointers to bugtracker entries:
+     - https://bugs.debian.org/956612
+     - https://gitlab.gnome.org/GNOME/pango/-/issues/404
+     - https://github.com/harfbuzz/harfbuzz/issues/1892
+  * Convert doc/devel/anna-install.txt to UTF-8.
+  * Clean whitespaces in doc/i18n/ChangeLog, making it UTF-8.
+  * Update translation-status for the release.
+
+  [ Vagrant Cascadian ]
+  * Update Firefly-RK3288 image for new u-boot version.
+  * [arm64] Add support for firefly-rk3399, pinebook-pro-rk3399,
+    rockpro64-rk3399, rock64-rk3328 and rock-pi-4-rk3399 to u-boot images
+    and netboot SD card images.
+  * [arm64] Make all netboot sdcard images start at offset 32768, for
+    compatibility with rockchip platforms.
+
+  [ Lubomir Rintel ]
+  * Add OLPC XO-1.75 laptop support. Closes: #949306
+
+  [ Aurelien Jarno ]
+  * Drop build-dependency on libgcc1. It has been renamed and it is not
+    needed since r62791.
+  * Add libgcc-s1 to the fake packages list as it doesn't have an udeb just
+    like libgcc1. Remove libc* and libnewt0.52 from that list.
+  * Install kmod-udeb instead of libkmod2-udeb now that the library and the
+    binaires are properly packaged in different udebs.
+  * Remove the mklibs library reduction pass. Add a hack to copy
+    libgcc_s.so.[124] from the host filesystem as it is not done anymore by
+    mklibs. This needs to be replaced by a proper udeb.
+  * Add explicit build-depends on fdisk on arm64, amd64 and i386 now that
+    util-linux doesn't depends on it anymore.
+
+  [ Wookey, Steve McIntyre, Alper Nebi Yasak ]
+  * Enable gtk build for arm64
+
+  [ Domenico Andreoli ]
+  * Add support for NanoPi NEO Air. Closes: #928863
+
+  [ Holger Wansing]
+  * d-i i18n guide: update for util-linux's eject overtaking.
+  * Add Occitan as new language for the installer (thanks to Quentin PAGÈS).
+
+  [ Steve McIntyre ]
+  * Tweaks for efi-image:
+    + Improve sizing calculation to reduce wasted space
+    + Include DTB files in the ESP for armhf and arm64 systems. Should
+      make U-Boot based systems work better when booting via UEFI
+  * Fix build failures related to #940056 "fakeroot does not fake
+    statx()". Don't use "ls" to check if /dev/console is a character
+    device, instead use "file". Thanks to JH Chatenet for helping to
+    debug this.
+
+  [ Samuel Thibault ]
+  * Copy over libmach/hurduser, until the fixed glibc is installed.
+  * Fix monolithic hurd build by excluding more packages.
+
+  [ Jessica Clarke ]
+  * kfreebsd: Update to use debian-ports-archive-keyring.
+  * kfreebsd: Don't try to build build_cdrom_gtk on kfreebsd-i386.
+
+  [ Julien Cristau ]
+  * Add grub2 to built-using (closes: #968998).
+
+  [ Ben Hutchings ]
+  * Add wireless-regdb-udeb to Linux builds that include nic-wireless-modules
+
+  [ Alper Nebi Yasak ]
+  * Include a /gtk/initrd.gz in graphical arm mini.iso builds
+  * Include fb-modules in non-gtk arm64 cdrom builds as well
+  * Build concatenateable images for arm64 netboot-gtk
+
+  [ John Paul Adrian Glaubitz ]
+  * powerpc: Add cdrom-core-modules and isofs-modules to cdrom pkg-lists
+  * ppc64: Add cdrom-core-modules and isofs-modules to cdrom pkg-lists
+
+ -- Cyril Brulebois <kibi@debian.org>  Wed, 02 Dec 2020 14:30:20 +0100
+
 debian-installer (20201114+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 5.9.6
