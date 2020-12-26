@@ -1,3 +1,10 @@
+debian-installer (20201226+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 5.9.15
+  * Import new upstream release
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisen-linux.org>  Sat, 26 Dec 2020 13:53:44 +0200
+
 debian-installer (20201206+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 5.9.11
