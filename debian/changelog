@@ -1,8 +1,9 @@
-debian-installer (20210129+kaisen1) kaisen-packages; urgency=medium
+debian-installer (20210223+kaisen1) kaisen-packages; urgency=medium
 
-  * Rebuild for Linux 5.10.9
+  * Rebuild for update repositories
+  * Update control file
 
- -- Kevin Chevreuil - Kaisen <kaisen@kaisen-linux.org>  Fri, 29 Jan 2020 10:35:18 +0200
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Tue, 23 Feb 2020 01:05:21 +0200
 
 debian-installer (20201226+kaisen1) kaisen-packages; urgency=medium
 

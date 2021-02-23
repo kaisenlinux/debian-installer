@@ -1,9 +1,9 @@
 Source: debian-installer
 Section: devel
 Priority: optional
-Maintainer: Kevin Chevreuil - Kaisen <kaisen@kaisen-linux.org>
+Maintainer: Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>
 XSBC-Original-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
-Standards-Version: 4.5.0
+Standards-Version: 4.5.1
 Vcs-Git: https://gitlab.com/kaisenlinux/packages/debian-installer.git
 Vcs-Browser: https://gitlab.com/kaisenlinux/packages/debian-installer
 Build-Depends:
