@@ -1,3 +1,9 @@
+debian-installer (20210327+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for new kernel version
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Sat, 27 Mar 2021 22:30:29 +0200
+
 debian-installer (20210318+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for new kernel version
