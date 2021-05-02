@@ -29,14 +29,10 @@ EXTRAS ?=
 # It will be loaded by the initrd-preseed udeb.
 PRESEED = 
 
-# The library reducer to use. Set to mklibs (to build with library reduction)
-# or mklibs-copy (to build without library reduction).
-MKLIBS = mklibs-copy
-
 # Normally the sources.list for building d-i will be derived from your
 # "normal" sources.list. However, you can specify a mirror here to override
 # this. You can use copy:/ to use a local mirror
-MIRROR = http://deb.kaisenlinux.org
+MIRROR = https://deb.kaisenlinux.org
 
 # Options to pass to dpkg when it is unpacking the udebs to create the
 # image. None should be needed, but --force-overwrite might need to be
@@ -96,10 +92,10 @@ WRITE_MEDIA = floppy
 TYPE = $(MEDIUM)
 
 # Used to write a /etc/lsb-release file in the installer initrd.
-LSB_DISTRIB_ID=Kaisen
-LSB_DISTRIB_DESCRIPTION="Kaisen GNU/Linux installer"
+LSB_DISTRIB_ID=Debian
+LSB_DISTRIB_DESCRIPTION="Kaisen $(shell uname -o) installer"
 # Inlude the build date of the installer in here.
-LSB_DISTRIB_RELEASE="Kaisen GNU/Linux - installer build $(BUILD_DATE)"
+LSB_DISTRIB_RELEASE="$(DEBIAN_VERSION) - installer build $(BUILD_DATE)"
 
 # This keyring is only used to verify udeb downloads using apt. Since the
 # build process does not run as root, apt cannot read /etc/apt/trusted.gpg.

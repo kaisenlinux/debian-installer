@@ -1,3 +1,43 @@
+debian-installer (20210502+kaisen1) kaisen-packages; urgency=medium
+
+  * Import new upstream release
+  * Change default picture use for syslinux and grub
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Sun, 02 May 2021 05:20:13 +0200
+
+debian-installer (20210415) unstable; urgency=medium
+
+  [ Shawn Guo ]
+  * Build in libinput instead of evdev driver for gtk installer.
+
+  [ Steve McIntyre ]
+  * Bump Linux kernel ABI to 5.10.0-6
+
+  [ Holger Wansing ]
+  * Add wireless-regdb-udeb to all Linux arch images (#979104).
+  * Correct keyword for bootloader arguments in netboot/xen/debian.cfg
+    example file. Closes: #904131
+  * Update of debian-internals manual to current development state.
+
+  [ Vagrant Cascadian ]
+  * [arm64] Add support for puma-rk3399.
+  * [arm64] Update to use u-boot-install-sunxi.
+  * [armhf] Make hd-media and netboot sdcard images start at offset 32768,
+    for compatibility with rockchip platforms.
+  * [arm64, armhf] Update SD-card-images sizes for netboot, netboot-gtk and hd-media.
+
+  [ Samuel Thibault ]
+  * On hurd-i386, mips, and powerpc, add debian-ports-archive-keyring-udeb also
+    in the monolithic images for bootstraping from debian-ports' unreleased.
+  * Update minimum disk and memory sizes.
+  * Makefile: Drop libmachuser/libhurduser manual copy, now fixed in glibc.
+  * Makefile: Drop /servers manual creation, now done in hurd-udeb package.
+
+  [ Cyril Brulebois ]
+  * Update translation-status for the release.
+
+ -- Cyril Brulebois <kibi@debian.org>  Thu, 15 Apr 2021 00:06:14 +0200
+
 debian-installer (20210327+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for new kernel version

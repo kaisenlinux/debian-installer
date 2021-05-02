@@ -1,14 +1,14 @@
 Source: debian-installer
 Section: devel
 Priority: optional
-Maintainer: Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>
 XSBC-Original-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
+Maintainer: Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>
 Standards-Version: 4.5.1
 Vcs-Git: https://gitlab.com/kaisenlinux/packages/debian-installer.git
 Vcs-Browser: https://gitlab.com/kaisenlinux/packages/debian-installer
 Build-Depends:
 # Base build dependencies:
-	debhelper (>= 13),
+	debhelper (>= 11),
 #		Of course.
 	apt (>= 0.8.16),
 # 		Used for downloading udebs.
@@ -95,6 +95,7 @@ Build-Depends:
 	emile [m68k],
 	emile-bootblocks [m68k],
 #		Bootloader for m68k/mac machines.
+#	        Signed bootloader components for UEFI Secure Boot
 	grub-efi-arm64-bin [arm64],
 	grub-efi-ia32-bin [hurd-i386 i386],
 	grub-efi-ia64-bin [ia64],
@@ -106,9 +107,9 @@ Build-Depends:
 	u-boot-imx (>= 2019.01+dfsg-3) [armhf],
 	u-boot-omap (>= 2016.09~rc1) [armhf],
 	u-boot-sunxi (>= 2019.07+dfsg-1) [armhf],
-	u-boot-sunxi (>= 2019.01+dfsg-6) [arm64],
+	u-boot-sunxi (>= 2021.01+dfsg-1~) [arm64],
 	u-boot-rockchip (>= 2020.04+dfsg-1~) [armhf],
-	u-boot-rockchip (>= 2020.04+dfsg-2~) [arm64],
+	u-boot-rockchip (>= 2021.01+dfsg-1~) [arm64],
 #		U-boot binaries for armhf systems without u-boot in flash memory
 	arm-trusted-firmware [arm64],
 	device-tree-compiler [arm64],

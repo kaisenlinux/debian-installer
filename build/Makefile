@@ -526,21 +526,6 @@ ifdef EXTRAUDEBS
 		$(foreach udeb,$(EXTRAUDEBS),$(UDEBDIR)/$(udeb).udeb)
 endif
 
-ifeq ($(DEB_HOST_ARCH_OS),hurd)
-	# Missing in the current libc0.3-udeb
-	# To remove with glibc 2.31
-	cp /lib/i386-gnu/libmachuser* $(TREE)/lib
-	cp /lib/i386-gnu/libhurduser* $(TREE)/lib
-	# On Hurd the SONAME for the dynamic linker is ld.so.1, but binaries
-	# have the ld.so symlink as the interpreter.
-	# To remove with glibc 2.31
-	ln -sf ld.so.1 $(TREE)/lib/ld.so
-
-	# We need /servers/exec and startup at boot time
-	touch $(TREE)/servers/exec
-	touch $(TREE)/servers/startup
-endif
-
 	# HACK ALERT: copy libgcc_s.so.[124] from the host system as
 	# libgcc-s[124] is not packaged as a udeb
 	cp /lib/$(DEB_HOST_MULTIARCH)/libgcc_s.so.[124] $(TREE)/lib
