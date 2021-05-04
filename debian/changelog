@@ -1,3 +1,9 @@
+debian-installer (20210504+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 5.10.28
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Tue, 04 May 2021 04:30:52 +0200
+
 debian-installer (20210502+kaisen1) kaisen-packages; urgency=medium
 
   * Import new upstream release
