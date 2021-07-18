@@ -95,7 +95,6 @@ Build-Depends:
 	emile [m68k],
 	emile-bootblocks [m68k],
 #		Bootloader for m68k/mac machines.
-#	        Signed bootloader components for UEFI Secure Boot
 	grub-efi-arm64-bin [arm64],
 	grub-efi-ia32-bin [hurd-i386 i386],
 	grub-efi-ia64-bin [ia64],

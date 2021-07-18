@@ -11,7 +11,7 @@
 
 # Default kernel ABI version to use. Append a kernel flavour to
 # produce KERNELVERSION.
-LINUX_KERNEL_ABI ?= 5.10.0-kaisen4
+LINUX_KERNEL_ABI ?= 5.10.0-kaisen5
 
 # Always "di" these days
 KERNEL_FLAVOUR ?= di
@@ -92,10 +92,10 @@ WRITE_MEDIA = floppy
 TYPE = $(MEDIUM)
 
 # Used to write a /etc/lsb-release file in the installer initrd.
-LSB_DISTRIB_ID=Debian
-LSB_DISTRIB_DESCRIPTION="Kaisen $(shell uname -o) installer"
+LSB_DISTRIB_ID=Kaisen
+LSB_DISTRIB_DESCRIPTION="Kaisen Linux installer"
 # Inlude the build date of the installer in here.
-LSB_DISTRIB_RELEASE="$(DEBIAN_VERSION) - installer build $(BUILD_DATE)"
+LSB_DISTRIB_RELEASE="Kaisen Linux installer build $(BUILD_DATE)"
 
 # This keyring is only used to verify udeb downloads using apt. Since the
 # build process does not run as root, apt cannot read /etc/apt/trusted.gpg.
