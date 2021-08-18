@@ -1,8 +1,14 @@
+debian-installer (20210818+kaisen2) kaisen-packages; urgency=medium
+
+  * Fix values in build/config/common
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Wed, 18 Aug 2021 23:17:46 +0200
+
 debian-installer (20210818+kaisen1) kaisen-packages; urgency=medium
 
   * Import new upstream release
 
- -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Wed, 17 Aug 2021 11:42:49 +0200
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Wed, 18 Aug 2021 11:42:49 +0200
 
 debian-installer (20210731) unstable; urgency=medium
 
