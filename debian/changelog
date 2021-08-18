@@ -1,3 +1,20 @@
+debian-installer (20210818+kaisen1) kaisen-packages; urgency=medium
+
+  * Import new upstream release
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Wed, 17 Aug 2021 11:42:49 +0200
+
+debian-installer (20210731) unstable; urgency=medium
+
+  [ Cyril Brulebois ]
+  * Update translation-status for the release.
+
+  [ Steve McIntyre ]
+  * Make mini.iso work with UEFI boot
+  * Bump Linux kernel ABI to 5.10.0-8
+
+ -- Cyril Brulebois <kibi@debian.org>  Sat, 31 Jul 2021 06:20:00 +0200
+
 debian-installer (20210717+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 5.10.46

@@ -32,7 +32,7 @@ PRESEED =
 # Normally the sources.list for building d-i will be derived from your
 # "normal" sources.list. However, you can specify a mirror here to override
 # this. You can use copy:/ to use a local mirror
-MIRROR = https://deb.kaisenlinux.org
+#MIRROR = http://www.us.debian.org/debian
 
 # Options to pass to dpkg when it is unpacking the udebs to create the
 # image. None should be needed, but --force-overwrite might need to be
@@ -46,6 +46,7 @@ DEBIAN_RELEASE = kaisen-rolling
 # installation images. (Only the codename is used while the version number
 # has not yet been determined.)
 DEBIAN_VERSION = kaisen-rolling
+DEBIAN_VERSION ?= kaisen-rolling
 
 # Define here from what release (codename!) components (udebs) should be taken
 # to build debian-installer. By default this is set to 'unstable' for building
@@ -93,9 +94,9 @@ TYPE = $(MEDIUM)
 
 # Used to write a /etc/lsb-release file in the installer initrd.
 LSB_DISTRIB_ID=Kaisen
-LSB_DISTRIB_DESCRIPTION="Kaisen Linux installer"
+LSB_DISTRIB_DESCRIPTION="Kaisen $(shell uname -o) installer"
 # Inlude the build date of the installer in here.
-LSB_DISTRIB_RELEASE="Kaisen Linux installer build $(BUILD_DATE)"
+LSB_DISTRIB_RELEASE="$(DEBIAN_VERSION) - installer build $(BUILD_DATE)"
 
 # This keyring is only used to verify udeb downloads using apt. Since the
 # build process does not run as root, apt cannot read /etc/apt/trusted.gpg.
