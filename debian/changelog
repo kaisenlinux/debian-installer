@@ -1,3 +1,9 @@
+debian-installer (20210830+kaisen1) kaisen-packages; urgency=medium
+
+  * Update for Linux 5.13.12-kaisen1
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Mon, 30 Aug 2021 15:41:16 +0200
+
 debian-installer (20210818+kaisen2) kaisen-packages; urgency=medium
 
   * Fix values in build/config/common
