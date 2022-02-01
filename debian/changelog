@@ -1,3 +1,9 @@
+debian-installer (20220131+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 5.16.3
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Mon, 31 Jan 2021 13:49:38 +0100
+
 debian-installer (20211112+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 5.15.1
