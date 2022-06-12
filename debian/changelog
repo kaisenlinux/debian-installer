@@ -1,3 +1,9 @@
+debian-installer (20220612+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild to add the new GRUB pic
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Sun, 12 Jun 2022 18:58:11 +0100
+
 debian-installer (20220424+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 5.17.3
