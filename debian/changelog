@@ -1,3 +1,9 @@
+debian-installer (20220901+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 5.19
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Thu, 01 Sep 2022 06:21:10 +0100
+
 debian-installer (20220612+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild to add the new GRUB pic
