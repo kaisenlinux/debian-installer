@@ -3,7 +3,7 @@ Section: devel
 Priority: optional
 XSBC-Original-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
 Maintainer: Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>
-Standards-Version: 4.6.1
+Standards-Version: 4.3.0
 Vcs-Git: https://gitlab.com/kaisenlinux/packages/debian-installer.git
 Vcs-Browser: https://gitlab.com/kaisenlinux/packages/debian-installer
 Build-Depends:
@@ -29,6 +29,8 @@ Build-Depends:
 	docbook-xml,
 	docbook-xsl,
 #		The d-i partman-doc and internals manual is in DocBook XML 4.x.
+	unifont-bin,
+#		For hex2bdf used in font building.
 	libbogl-dev,
 #		For bdftobogl used in font reduction.
 	libgcc-s1 [!hppa !m68k], libgcc-s2 [m68k], libgcc-s4 [hppa],
@@ -103,7 +105,7 @@ Build-Depends:
 #		Used to make EFI bootable images
 	grub-ieee1275-bin [powerpc ppc64 ppc64el sparc sparc64],
 #		IEEE1275 bootloader support.
-	u-boot-imx (>= 2019.01+dfsg-3) [armhf],
+	u-boot-imx (>= 2021.04~rc4+dfsg-1) [armhf],
 	u-boot-omap (>= 2016.09~rc1) [armhf],
 	u-boot-sunxi (>= 2019.07+dfsg-1) [armhf],
 	u-boot-sunxi (>= 2021.01+dfsg-1~) [arm64],
@@ -130,7 +132,7 @@ Build-Depends:
 	kmod [linux-any],
 #		depmod.
 #
-	bf-utf-source [!s390 !s390x],
+	unifont [!s390 !s390x],
 #		Contains the unicode font we use. Not a udeb since we
 #		perform font reduction at build time.
 	openssl,

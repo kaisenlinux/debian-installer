@@ -1,3 +1,65 @@
+debian-installer (20221110+kaisen1) kaisen-packages; urgency=medium
+
+  * Import Debian improvements
+  * Rebuilt fot Linux 6.0.7
+  * Update the localudebs versions
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Thu, 10 Nov 2022 12:47:24 +0100
+
+debian-installer (20220917) bookworm-proposed-updates; urgency=medium
+
+  * Revert “Minimal support for cross-building”:
+      https://lists.debian.org/debian-release/2022/09/msg00509.html
+  * Upload to testing-proposed-updates to avoid u-boot regressions in
+    unstable (#1016963).
+
+ -- Cyril Brulebois <kibi@debian.org>  Sat, 17 Sep 2022 21:54:33 +0200
+
+debian-installer (20220914) unstable; urgency=medium
+
+  [ Samuel Thibault ]
+  * Double the number of available inodes on the hurd initrd.
+  * Start speech synthesis after 30s timeout.
+
+  [ Youngtaek Yoon ]
+  * Support multiple udeb components.
+
+  [ Vagrant Cascadian ]
+  * [armhf] Add support for Bananapi_M2_Ultra (Closes: #982913).
+  * [armhf] Update MX53LOCO filename with newer u-boot.
+
+  [ John Paul Adrian Glaubitz ]
+  * ia64: Remove ide-core-modules and ide-modules from pkg-lists
+  * m68k: Remove ide-core-modules and ide-modules from pkg-lists
+  * powerpc: Add sata-modules to cdrom pkg-lists
+  * ppc64: Add sata-modules to cdrom pkg-lists
+
+  [ Cyril Brulebois ]
+  * Bump Linux kernel ABI to 5.19.0-1.
+  * Install bookworm, using bookworm udebs.
+  * Work around FTBFS on armel and mipsel, where libcrypto3-udeb depends
+    on libatomic1: use libatomic1.so* from the host system (as that's done
+    for libgcc_s.so*), instead of introducing libatomic1-udeb.
+  * Update translation-status for the release.
+
+  [ Sophie Brun ]
+  * Harmonize UEFI (grub) and BIOS (syslinux) boot menus:
+    - use same label for "dark theme menu"
+    - use same inclusion rules for the "Install with speech synthesis" menu
+  * Do not hardcode the name of the distribution in syslinux's menu.cfg
+
+  [ Frédéric Bonnard ]
+  * Minimal support for cross-building.
+
+  [ Roland Clobus ]
+  * build/Makefile:
+     - use install -p to preserve timestamps.
+  * build/daily-build:
+     - use rsync -t to preserve timestamps.
+     - export SOURCE_DATE_EPOCH, also setting it if needed.
+
+ -- Cyril Brulebois <kibi@debian.org>  Wed, 14 Sep 2022 15:44:07 +0200
+
 debian-installer (20220901+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 5.19

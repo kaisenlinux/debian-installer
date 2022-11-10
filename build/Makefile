@@ -178,7 +178,7 @@ endef
 # A generic recursion rule
 .PHONY: all_%
 all_%:
-	@install -d $(STAMPS)
+	@install -p -d $(STAMPS)
 	$(call recurse,SUBARCH,subarch,$*)
 
 .PHONY: subarch_%
@@ -288,7 +288,7 @@ _clean: tree_umount
 # we provide a generic build rule.
 .PHONY: build_%
 build_%:
-	@install -d $(STAMPS)
+	@install -p -d $(STAMPS)
 	@$(submake) _build $(shell $(submake) $(subst build_,validate_,$@))
 
 # The general build rule.
@@ -485,8 +485,8 @@ ifndef OMIT_LSB
 		set -e; \
 		mkdir -p $(TREE)/etc; \
 		echo 'DISTRIB_ID=$(LSB_DISTRIB_ID)' > $(TREE)/etc/lsb-release; \
-		echo 'DISTRIB_DESCRIPTION=$(LSB_DISTRIB_DESCRIPTION)' >> $(TREE)/etc/lsb-release; \
-		echo 'DISTRIB_RELEASE=$(LSB_DISTRIB_RELEASE)' >> $(TREE)/etc/lsb-release; \
+		echo 'DISTRIB_DESCRIPTION="$(LSB_DISTRIB_DESCRIPTION)"' >> $(TREE)/etc/lsb-release; \
+		echo 'DISTRIB_RELEASE="$(LSB_DISTRIB_RELEASE)"' >> $(TREE)/etc/lsb-release; \
 		echo 'X_INSTALLATION_MEDIUM=$(MEDIUM)' >> $(TREE)/etc/lsb-release; \
 	fi
 endif
@@ -529,6 +529,8 @@ endif
 	# HACK ALERT: copy libgcc_s.so.[124] from the host system as
 	# libgcc-s[124] is not packaged as a udeb
 	cp /lib/$(DEB_HOST_MULTIARCH)/libgcc_s.so.[124] $(TREE)/lib
+	# HACK ALERT: ditto for libatomic1
+	cp /usr/lib/$(DEB_HOST_MULTIARCH)/libatomic.so.1* $(TREE)/usr/lib/$(DEB_HOST_MULTIARCH)
 
 	# Reduce status file to contain only the elements we care about.
 	egrep -i '^((Status|Provides|Depends|Package|Version|Description|installer-menu-item|Description-..):|$$)' \
@@ -636,9 +638,9 @@ sources.list.udeb:
 			echo "deb $(MIRROR) unreleased $(UDEB_COMPONENTS)"; \
 		fi \
 	else \
-		gen-sources.list.udeb "$(SYSTEM_SOURCES_LIST)" $(USE_UDEBS_FROM) $(UDEB_COMPONENTS) $(USE_PROPOSED_UPDATES); \
+		gen-sources.list.udeb "$(SYSTEM_SOURCES_LIST)" $(USE_UDEBS_FROM) "$(UDEB_COMPONENTS)" $(USE_PROPOSED_UPDATES); \
 		if [ "$(USE_UNRELEASED)" = 1 ]; then \
-			gen-sources.list.udeb "$(SYSTEM_SOURCES_LIST)" unreleased $(UDEB_COMPONENTS); \
+			gen-sources.list.udeb "$(SYSTEM_SOURCES_LIST)" unreleased "$(UDEB_COMPONENTS)"; \
 		fi \
 	fi) > $@
 	@if [ -e $@.local ]; then \
@@ -667,7 +669,13 @@ $(TEMP)/unifont.bdf: $(TEMP)/all.utf
 		echo "a version of glibc with a different locale data format.)"; \
 	        exit 1; \
 	    fi
-	LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font /usr/src/unifont.bdf < $(TEMP)/all.utf > $@.tmp
+	hex2bdf \
+	    -v "`dpkg-query -W -f '$${Version}' unifont`" \
+	    -c "`dpkg-query -W -f '$${Homepage}' unifont`" \
+	    < /usr/share/unifont/unifont.hex \
+	    > $@.full
+	LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font $@.full < $(TEMP)/all.utf > $@.tmp
+	rm $@.full
 	mv $@.tmp $@
 
 $(TREE)/lib/unifont.bgf: $(TEMP)/unifont.bdf
@@ -696,13 +704,13 @@ endif
 
 	# Only build the font if we have installation-locale
 ifeq ($(DEB_HOST_ARCH_OS),linux)
-	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/src/unifont.bdf ]; then \
+	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/share/unifont/unifont.hex ]; then \
 		$(submake) $(TREE)/lib/unifont.bgf; \
 	fi
 endif
 ifeq ($(DEB_HOST_ARCH_OS),hurd)
 	# The hurd console uses a BDF font
-	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/src/unifont.bdf ]; then \
+	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/share/unifont/unifont.hex ]; then \
 		$(submake) $(TREE)/lib/unifont.bdf; \
 	fi
 endif
@@ -712,7 +720,7 @@ endif
 	$(clamp_mtimes) $(TREE)/lib
 	$(normalise_permissions) $(TREE)/lib
 
-	install -d $(TEMP)
+	install -p -d $(TEMP)
 
 	set -e; \
 	case $(INITRD_FS) in \
@@ -741,7 +749,7 @@ endif
 
 ifeq ($(SYMLINK_INITRD),)
 $(INITRD): $(TEMP_INITRD)
-	install -m 644 -D $< $@
+	install -p -m 644 -D $< $@
 	update-manifest $@ $(MANIFEST-INITRD) $(UDEB_LISTS)
 else
 $(INITRD): $(realpath $(dir $(INITRD))/$(SYMLINK_INITRD))
@@ -751,7 +759,7 @@ $(INITRD): $(realpath $(dir $(INITRD))/$(SYMLINK_INITRD))
 endif
 
 $(RAMDISK): $(TEMP_INITRD)
-	install -m 644 -D $< $@
+	install -p -m 644 -D $< $@
 	update-manifest $@ $(MANIFEST-RAMDISK) $(UDEB_LISTS)
 
 # raw kernel images
@@ -759,7 +767,7 @@ ifeq ($(SYMLINK_KERNEL),)
 $(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(KERNEL):
 	@$(MAKE) $(STAMPS)tree-unpack-$(targetstring)-stamp $(TEMP_REAL_KERNEL)
-	install -m 644 -D $(TEMP_REAL_KERNEL) $@
+	install -p -m 644 -D $(TEMP_REAL_KERNEL) $@
 	update-manifest $@ $(MANIFEST-KERNEL)
 else
 $(KERNEL): $(realpath $(dir $(KERNEL))/$(SYMLINK_KERNEL))
@@ -782,7 +790,7 @@ $(DTBS): $(TEMP_KERNEL)
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
-	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
+	install -p -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
 	update-manifest $@ $(MANIFEST-BOOT) $(UDEB_LISTS)
 
 $(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
@@ -791,14 +799,14 @@ $(TEMP_BOOT): $(TEMP_INITRD) $(TEMP_KERNEL) $(TEMP_BOOT_SCREENS) arch_boot
 
 # non-bootable root images
 $(ROOT): $(TEMP_ROOT)
-	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
+	install -p -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
 	update-manifest $@ $(MANIFEST-ROOT) $(UDEB_LISTS)
 
 $(TEMP_ROOT): $(TEMP_INITRD) arch_root
 
 # miniature ISOs with only a boot image
 $(MINIISO): $(TEMP_MINIISO)
-	install -m 644 -D $(TEMP_MINIISO) $@
+	install -p -m 644 -D $(TEMP_MINIISO) $@
 	update-manifest $@ $(MANIFEST-MINIISO) $(UDEB_LISTS)
 
 $(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
@@ -833,19 +841,19 @@ $(TEMP_NETBOOT_DIR): arch_netboot_dir
 
 $(MISC): TEMP_REAL_MISC = $(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(MISC): 
-	install -m 644 $(TEMP_REAL_MISC) $(SOME_DEST)/$(EXTRANAME)
+	install -p -m 644 $(TEMP_REAL_MISC) $(SOME_DEST)/$(EXTRANAME)
 	update-manifest \
 		$(SOME_DEST)/$(EXTRANAME)$(shell basename $(TEMP_REAL_MISC)) \
 		$(MANIFEST-MISC)
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
-	install -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
+	install -p -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
 	update-manifest $@ $(MANIFEST-EXTRA) $(UDEB_LISTS)
 
 $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
-	install -d $(shell dirname $@)
-	install -d $(TREE)
+	install -p -d $(shell dirname $@)
+	install -p -d $(TREE)
 	set -e; case $(INITRD_FS) in \
 	ext2) \
 		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -m 0 $@ ; \
@@ -908,7 +916,7 @@ pkg-lists/kernel-module-udebs:
 # Write (floppy) images
 .PHONY: write_%
 write_%:
-	@install -d $(STAMPS)
+	@install -p -d $(STAMPS)
 	@$(submake) _write $(shell $(submake) $(subst write_,validate_,$@))
 
 .PHONY: _write
@@ -919,7 +927,7 @@ _write: _build
 # you can check the floppy to make sure it wrote properly.
 .PHONY: checkedwrite_%
 checkedwrite_%:
-	@install -d $(STAMPS)
+	@install -p -d $(STAMPS)
 	@$(submake) _checkedwrite $(shell $(submake) $(subst checkedwrite_,validate_,$@))
 
 .PHONY: _checkedwrite
