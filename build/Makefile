@@ -839,6 +839,15 @@ $(TEMP_BOOT_SCREENS): arch_boot_screens
 $(TEMP_CD_INFO_DIR): arch_cd_info_dir
 $(TEMP_NETBOOT_DIR): arch_netboot_dir
 
+# disk/partition images for ChromeOS devices
+$(DEPTHCHARGE): $(TEMP_DEPTHCHARGE)
+	rm -rf $(SOME_DEST)/$(EXTRANAME)/depthcharge
+	mkdir -p $(SOME_DEST)/$(EXTRANAME)/depthcharge
+	cp -a $(TEMP_DEPTHCHARGE)/* $@
+	update-manifest $@ $(MANIFEST-DEPTHCHARGE) $(UDEB_LISTS)
+
+$(TEMP_DEPTHCHARGE): arch_depthcharge
+
 $(MISC): TEMP_REAL_MISC = $(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(MISC): 
 	install -p -m 644 $(TEMP_REAL_MISC) $(SOME_DEST)/$(EXTRANAME)

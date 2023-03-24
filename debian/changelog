@@ -1,7 +1,49 @@
+debian-installer (20230324+kaisen1) kaisen-packages; urgency=medium
+
+  * Import Debian improvements
+  * Rebuilt for Linux 6.1.15
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Fri, 24 Mar 2023 11:40:39 +0100
+
+debian-installer (20230217) unstable; urgency=medium
+
+  [ Steve McIntyre ]
+  * Switch to using bookworm artwork for the splash screens (Emerald).
+
+  [ Cyril Brulebois ]
+  * Update translation-status for the release.
+  * Fix build-depends-on-1-revision lintian warning for u-boot-imx and
+    u-boot-sunxi.
+
+ -- Cyril Brulebois <kibi@debian.org>  Fri, 17 Feb 2023 04:22:37 +0100
+
+debian-installer (20230207) unstable; urgency=medium
+
+  [ Samuel Thibault ]
+  * Revert the build-dependencies changes of "Add support for cross-building".
+  * Build-depend on bogl-utils instead of libbogl-dev for getting bdftobogl.
+
+  [ Cyril Brulebois ]
+  * Bump Linux kernel ABI to 6.1.0-3.
+  * Update MIRROR example with a better value (http://deb.debian.org/debian).
+  * Update translation-status for the release.
+
+  [ Holger Wansing ]
+  * Add ka.utf with needed characters for Georgian language, to fix broken
+    rendering in text installer. Closes: #1017435
+
+  [ Alper Nebi Yasak ]
+  * [amd64, arm64] Build netboot images for ChromeOS devices
+    - Make the disk images reproducible
+    - Add the images to manifests
+    - Refactor into a Makefile target
+
+ -- Cyril Brulebois <kibi@debian.org>  Tue, 07 Feb 2023 14:59:08 +0100
+
 debian-installer (20221110+kaisen1) kaisen-packages; urgency=medium
 
   * Import Debian improvements
-  * Rebuilt fot Linux 6.0.7
+  * Rebuilt for Linux 6.0.7
   * Update the localudebs versions
 
  -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Thu, 10 Nov 2022 12:47:24 +0100
