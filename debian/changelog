@@ -1,8 +1,9 @@
 debian-installer (20230326+kaisen1) kaisen-packages; urgency=medium
 
   * No bip on the boot menu
+  * Fix menu entries
 
- -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Sun, 26 Mar 2023 17:13:12 +0100
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Sun, 26 Mar 2023 18:40:02 +0100
 
 debian-installer (20230324+kaisen1) kaisen-packages; urgency=medium
 
