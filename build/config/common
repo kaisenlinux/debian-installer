@@ -11,7 +11,11 @@
 
 # Default kernel ABI version to use. Append a kernel flavour to
 # produce KERNELVERSION.
-LINUX_KERNEL_ABI ?= 6.1.0-1kaisen
+LINUX_KERNEL_ABI ?= 6.4.0-1kaisen
+
+# Make sure the mirror is sufficiently up-to-date, by checking minimal
+# version (list of package_version):
+CHECK_MINIMAL_VERSION ?=
 
 # Always "di" these days
 KERNEL_FLAVOUR ?= di

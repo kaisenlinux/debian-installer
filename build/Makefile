@@ -56,10 +56,21 @@
 # Temporary workaround for #823881:
 export MTOOLS_SKIP_CHECK=1
 
+# Temporary workaround for #1036019:
+export DRM_DIR := /lib/modules/$(KERNELVERSION)/kernel/drivers/gpu/drm
+ifndef DRM_MODULES
+export DRM_MODULES :=          \
+	drm_shmem_helper.ko    \
+	drm_ttm_helper.ko      \
+	drm_vram_helper.ko     \
+	tiny/bochs.ko          \
+	tiny/cirrus.ko         \
+	ttm/ttm.ko
+endif
+
 # Add to PATH so dpkg will always work, and so local programs will be found.
 PATH := util:$(PATH):/usr/sbin:/sbin
 EATMYDATA = $(shell which eatmydata 2>/dev/null)
-gzip = $(shell which pigz >/dev/null 2>&1 && echo "pigz -n -T" || echo "gzip -n")
 
 # We don't want this to be run each time we re-enter.
 ifndef DEB_HOST_ARCH
@@ -167,6 +178,10 @@ endef
 
 define e2fsck
   e2fsck -fy
+endef
+
+define gzip
+  pigz -nm
 endef
 
 # Define MKFS_JFFS2 in the config file for your target.
@@ -430,6 +445,19 @@ endif
 
 ifeq ($(DEB_HOST_ARCH_OS),linux)
 ifdef KERNELVERSION
+
+ifneq (,$(filter $(ARCH),amd64 arm64 i386))
+	# HACK alert (#1036019): this isn't just a problem for the graphical
+	# installer, complement fb-modules with extra modules for all images
+	# including DRM modules.
+	if [ -e "$(DRM_DIR)/drm.ko" ]; then \
+		for module in $(DRM_MODULES); do \
+			mkdir -p $(TREE)$(DRM_DIR)/$$(dirname $$module); \
+			cp $(DRM_DIR)/$$module $(TREE)$(DRM_DIR)/$$module; \
+		done; \
+	fi
+endif
+
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
 	# modules.
@@ -623,6 +651,13 @@ UDEBS = $(shell set -e; get-packages udeb update >&2; pkg-list $(TYPE) "$(DRIVER
 $(STAMPS)get_udebs-$(targetstring)-stamp: sources.list.udeb
 	dh_testroot
 	@rm -f $@
+
+	# Check mirror freshness:
+	for pv in $(CHECK_MINIMAL_VERSION); do \
+		p=$$(echo $$pv|sed 's/_.*//'); \
+		v=$$(echo $$pv|sed 's/.*_//'); \
+		CHECKMINVER=$$v get-packages udeb $$p; \
+	done
 
 	get-packages udeb $(UDEBS)
 	@touch $@
