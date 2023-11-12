@@ -1,3 +1,10 @@
+debian-installer (20231112+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 6.5.8
+  * Update localudebs
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Sun, 12 Nov 2023 16:50:51 +0100
+
 debian-installer (20230815+kaisen1) kaisen-packages; urgency=medium
 
   * Import Debian changes
