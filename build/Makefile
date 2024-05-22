@@ -498,7 +498,7 @@ endif
 ifdef KERNELNAME
 	# Move the kernel image out of the way.
 	$(foreach name,$(KERNELNAME), \
-		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
+		mv -f $(TREE)/boot/$(name)-$(KERNELVERSION) $(TEMP)/$(name);)
 	test -e $(TREE)/boot/zfs || rmdir $(TREE)/boot/
 endif
 

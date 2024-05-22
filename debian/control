@@ -3,12 +3,12 @@ Section: devel
 Priority: optional
 XSBC-Original-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
 Maintainer: Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>
-Standards-Version: 4.3.0
+Standards-Version: 4.7.0
 Vcs-Git: https://gitlab.com/kaisenlinux/packages/debian-installer.git
 Vcs-Browser: https://gitlab.com/kaisenlinux/packages/debian-installer
 Build-Depends:
 # Base build dependencies:
-	debhelper (>= 11),
+	debhelper-compat (= 13),
 #		Of course.
 	apt (>= 0.8.16),
 # 		Used for downloading udebs.
@@ -16,7 +16,7 @@ Build-Depends:
 # 		apt-ftparchive is used for including localudebs.
 	gnupg,
 #		New versions of apt need gnupg for security checks.
-	debian-archive-keyring (>= 2006.11.22),
+	debian-archive-keyring,
 	kaisen-archive-keyring,
 #		To provide the archive key for security checks.
 	dctrl-tools,
@@ -162,10 +162,10 @@ Build-Depends:
 #		when creating ISO hybrid images on amd64 and i386 systems.
 	fontconfig,
 #		Used to generate a font cache through fc-cache, for gtk flavours
-	linux-image-6.4.0-1kaisen-amd64 [amd64],
-	linux-image-6.4.0-1kaisen-arm64 [arm64],
-	linux-image-6.4.0-1kaisen-686 [i386],
-	linux-image-6.4.0-1kaisen-686-pae [i386],
+	linux-image-amd64 [amd64],
+	linux-image-arm64 [arm64],
+	linux-image-686 [i386],
+	linux-image-686-pae [i386],
 #		Ship some more drm modules, without waiting on fb-modules (#1036019)
 
 Package: debian-installer

@@ -1,3 +1,14 @@
+debian-installer (20240522+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 6.8.9
+  * Bump the Linux version which required to build this package
+  * Remove the debian/compat file
+  * Update the build/Makefile file
+  * Bump the Standards-Version number
+  * Use the linux-image metackage instead of the package with version number
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Wed, 22 May 2024 23:32:48 +0200
+
 debian-installer (20231112+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 6.5.8
