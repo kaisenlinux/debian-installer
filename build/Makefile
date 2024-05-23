@@ -95,6 +95,7 @@ endef
 # via recursive make calls. ARCH is constant, we don't support
 # crosscompiling.
 ARCH = $(DEB_HOST_ARCH)
+OS = $(DEB_HOST_ARCH_OS)
 
 # By default, we just advertise what we can do.
 .PHONY: all
@@ -118,6 +119,7 @@ endef
 include config/common
 include config/dir
 -include config/$(ARCH).cfg
+-include config/$(OS).cfg
 -include config/$(ARCH)/$(SUBARCH).cfg
 -include config/$(ARCH)/$(SUBARCH)/$(MEDIUM).cfg
 -include config/$(ARCH)/$(SUBARCH)/$(MEDIUM)/$(FLAVOUR).cfg
@@ -421,6 +423,27 @@ endif
 		perl -nle '$$p = $$_; $$v = <>; chomp $$v; $$a = <>; chomp $$a; <>; print "$$p $$v $$a"' | \
 		sort > $(TEMP_UDEB_LIST)
 
+	# Temporary: prefer kmod executables over busybox ones (#1060134).
+	for exec in depmod insmod lsmod modinfo modprobe rmmod; do \
+		rm -vf "$(TREE)/sbin/$$exec"; \
+	done
+
+	merge-usr "$(TREE)"
+
+ifeq ($(DEB_HOST_ARCH_OS),linux)
+	# XXX: Compensate (at least temporarily) for kernel-image's now shipping
+	# a versioned vmlinuz-* instead of just vmlinuz (in sid, since 6.6.8-1);
+	# ditto for vmlinux-* on some archs (e.g. ppc64el).
+	VMLINUXZ=`find $(TREE)/boot/ -name 'vmlinu[xz]-*'`; \
+	if [ `echo "$$VMLINUXZ" | wc -w` != 1 ]; then \
+		echo "E: unexpected number of vmlinu[xz]-* in tree: $$VMLINUXZ (expected: 1)" >&2; \
+		exit 1; \
+	else \
+		echo "I: unversioning vmlinu[xz]" >&2; \
+		mv -v $$VMLINUXZ $(TREE)/boot/`basename $$VMLINUXZ|sed 's/-.*//'`; \
+	fi
+endif
+
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
@@ -450,10 +473,10 @@ ifneq (,$(filter $(ARCH),amd64 arm64 i386))
 	# HACK alert (#1036019): this isn't just a problem for the graphical
 	# installer, complement fb-modules with extra modules for all images
 	# including DRM modules.
-	if [ -e "$(DRM_DIR)/drm.ko" ]; then \
+	if [ -e "$(DRM_DIR)/drm.ko.xz" ]; then \
 		for module in $(DRM_MODULES); do \
 			mkdir -p $(TREE)$(DRM_DIR)/$$(dirname $$module); \
-			cp $(DRM_DIR)/$$module $(TREE)$(DRM_DIR)/$$module; \
+			cp $(DRM_DIR)/$$module.xz $(TREE)$(DRM_DIR)/$$module; \
 		done; \
 	fi
 endif
@@ -498,7 +521,7 @@ endif
 ifdef KERNELNAME
 	# Move the kernel image out of the way.
 	$(foreach name,$(KERNELNAME), \
-		mv -f $(TREE)/boot/$(name)-$(KERNELVERSION) $(TEMP)/$(name);)
+		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
 	test -e $(TREE)/boot/zfs || rmdir $(TREE)/boot/
 endif
 

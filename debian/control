@@ -3,6 +3,7 @@ Section: devel
 Priority: optional
 XSBC-Original-Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
 Maintainer: Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>
+Uploaders: Cyril Brulebois <kibi@debian.org>
 Standards-Version: 4.7.0
 Vcs-Git: https://gitlab.com/kaisenlinux/packages/debian-installer.git
 Vcs-Browser: https://gitlab.com/kaisenlinux/packages/debian-installer
@@ -16,8 +17,8 @@ Build-Depends:
 # 		apt-ftparchive is used for including localudebs.
 	gnupg,
 #		New versions of apt need gnupg for security checks.
-	debian-archive-keyring,
 	kaisen-archive-keyring,
+	debian-archive-keyring (>= 2006.11.22),
 #		To provide the archive key for security checks.
 	dctrl-tools,
 #		Various manipulations of the udeb Packages files.
@@ -52,7 +53,7 @@ Build-Depends:
 	genromfs [sparc sparc64],
 #		Used for creating sparc floppies (which are not built by
 #		default.)
-	dosfstools [hurd-i386 i386 ia64 m68k amd64 armhf arm64],
+	dosfstools [hurd-i386 hurd-amd64 i386 ia64 m68k amd64 armhf arm64 riscv64],
 #		For creating FAT filesystems with mkfs.msdos.
 #		Of course i386/amd64 use this for floppies, CDs etc.
 #		m68k uses it for atari floppies
@@ -100,12 +101,14 @@ Build-Depends:
 #		Bootloader for m68k/amiga machines.
 	emile [m68k],
 	emile-bootblocks [m68k],
-#		Bootloader for m68k/mac machines.
+#	        Signed bootloader components for UEFI Secure Boot
+	grub-efi-amd64-bin [hurd-amd64],
 	grub-efi-arm64-bin [arm64],
 	grub-efi-ia32-bin [hurd-i386 i386],
 	grub-efi-ia64-bin [ia64],
 	grub-efi-arm-bin [armhf],
-	grub-common [amd64 arm64 i386], xorriso,
+	grub-efi-riscv64-bin [riscv64],
+	grub-common [amd64 arm64 i386 riscv64], xorriso,
 #		Used to make EFI bootable images
 	grub-ieee1275-bin [powerpc ppc64 ppc64el sparc sparc64],
 #		IEEE1275 bootloader support.
@@ -127,7 +130,7 @@ Build-Depends:
 	tofrodos [i386 amd64 kfreebsd-i386 kfreebsd-amd64],
 #		For todos, used on files that need to be accessible from
 #		DOS.
-	mtools [i386 ia64 m68k amd64 armhf arm64 kfreebsd-i386 kfreebsd-amd64 hurd-i386],
+	mtools [i386 ia64 m68k amd64 armhf arm64 riscv64 kfreebsd-i386 kfreebsd-amd64 hurd-i386 hurd-amd64],
 #		mcopy is used to put files onto FAT filesystems w/o
 #		mounting them. Note that patches from #900409 and #900410
 #		are required for a reproducible build (available since
@@ -143,13 +146,13 @@ Build-Depends:
 #		Used to encrypt a firmware image so an ARM based device
 #		(Thecus N2100) will accept it. Also useful on other
 #		architectures if SSL_CERTS has been set locally.
-	win32-loader (>= 0.7.2) [i386 amd64 kfreebsd-i386 kfreebsd-amd64 hurd-i386],
+	win32-loader (>= 0.7.2) [i386 amd64 kfreebsd-i386 kfreebsd-amd64 hurd-i386 hurd-amd64],
 #		Alternative boot method for win32 platforms.
 	makefs (>= 20100306-5+kbsd8u1~) [kfreebsd-any],
 #		Used to create an UFS1 filesystem from a directory tree.
-	grub-pc (>= 2.02~beta2~) [kfreebsd-i386 kfreebsd-amd64 hurd-i386],
+	grub-pc (>= 2.02~beta2~) [kfreebsd-i386 kfreebsd-amd64 hurd-i386 hurd-amd64],
 #		Used as the CD-ROM's bootloader
-	xorriso (>= 1.3.2-1~) [kfreebsd-i386 kfreebsd-amd64 hurd-i386],
+	xorriso (>= 1.3.2-1~) [kfreebsd-i386 kfreebsd-amd64 hurd-i386 hurd-amd64],
 #               Used by grub-pc to create the CD-ROM images
 	debian-ports-archive-keyring [alpha hppa ia64 m68k powerpc powerpcspe ppc64 riscv64 sh4 sparc64 x32],
 #		Used for architectures hosted on debian-ports.org
@@ -162,10 +165,10 @@ Build-Depends:
 #		when creating ISO hybrid images on amd64 and i386 systems.
 	fontconfig,
 #		Used to generate a font cache through fc-cache, for gtk flavours
-	linux-image-amd64 [amd64],
-	linux-image-arm64 [arm64],
-	linux-image-686 [i386],
-	linux-image-686-pae [i386],
+	linux-image-6.8.9-1kaisen-amd64 [amd64],
+	linux-image-6.8.9-1kaisen-arm64 [arm64],
+	linux-image-6.8.9-1kaisen-686 [i386],
+	linux-image-6.8.9-1kaisen-686-pae [i386],
 #		Ship some more drm modules, without waiting on fb-modules (#1036019)
 
 Package: debian-installer
