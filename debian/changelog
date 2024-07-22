@@ -1,3 +1,9 @@
+debian-installer (20240722+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild for Linux 6.9.10
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Mon, 22 Jul 2024 09:05:02 +0200
+
 debian-installer (20240523+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 6.8.9
