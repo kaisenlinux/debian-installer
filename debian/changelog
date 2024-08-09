@@ -1,3 +1,59 @@
+debian-installer (20240908+kaisen1) kaisen-packages; urgency=medium
+
+  * Rebuild to add new changes
+
+ -- Kevin Chevreuil - Kaisen <kaisen@kaisenlinux.org>  Fri, 09 Aug 2024 15:09:14 +0200
+
+debian-installer (202306XX) UNRELEASED; urgency=medium
+
+  [ Cyril Brulebois ]
+  * Install trixie, using trixie udebs.
+  * Bump Linux kernel ABI to 6.10.3 (Closes: #1071873).
+  * Bump (temporary) linux-image build-deps accordingly.
+  * Makefile: unversion /boot/vmlinuz-* into /boot/vmlinuz.
+  * Makefile: adjust the drm/fb-modules workaround for now-compressed
+    modules.
+
+  [ harry88@gmx.ph ]
+  * Add support for Orange Pi One Plus (Closes: #980493)
+
+  [ Holger Wansing ]
+  * Update minimal RAM size value for amd64, according to lowmem value.
+  * d-i i18n guide: remove win32-loader from the manual.
+
+  [ Aurelien Jarno ]
+  * Build riscv64 from the official archive.
+  * Dot not include debian-ports-archive-keyring-udeb on riscv64.
+  * Add a device-tree target for riscv64.
+  * Switch the riscv64 netboot flavour to grub.efi.
+  * Build a mini.iso in the riscv64 netboot flavour.
+  * Update riscv64 netboot package list.
+  * Add a cdrom flavour for riscv64.
+  * Drop kfreebsd support.
+
+  [ John Paul Adrian Glaubitz ]
+  * alpha: Remove $(KERNELVERSION) suffix from KERNELNAME
+  * hppa: Rewrite configuration to support sub-architectures
+  * m68k: Remove $(KERNELVERSION) suffix from KERNELNAME
+  * loong64: Add support for loong64 (Closes: #1057713)
+
+  [ Samuel Thibault ]
+  * Add hurd-amd64 support.
+
+  [ Colin Watson ]
+  * Clarify that partman-auto-recipe.txt is written using BNF.
+
+  [ Helmut Grohne ]
+  * extend merge-usr tool to cover base-files functionality
+
+ -- Cyril Brulebois <kibi@debian.org>  Tue, 13 Jun 2023 19:42:29 +0200
+
+debian-installer (20230607) unstable; urgency=medium
+
+  * Release early, release often!
+
+ -- Cyril Brulebois <kibi@debian.org>  Wed, 07 Jun 2023 03:01:56 +0200
+
 debian-installer (20240722+kaisen1) kaisen-packages; urgency=medium
 
   * Rebuild for Linux 6.9.10

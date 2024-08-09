@@ -164,20 +164,6 @@ define normalise_permissions
   find $(1) -not -type d -and -not -type l -print0 | xargs -0r chmod $(FILE_MODE)
 endef
 
-# Limit on mfsroot size. It is determined by NKPT (in <machine/pmap.h).
-# On amd64, it can be increased by increasing this variable.  On i386,
-# this is a hard limit due to constraints of 4 GiB VM space.
-ifeq ($(DEB_HOST_ARCH),kfreebsd-i386)
-MFSROOT_LIMIT := 42m
-else ifeq ($(DEB_HOST_ARCH),kfreebsd-amd64)
-# See Bug#783773 for derivation.
-MFSROOT_LIMIT := 78m
-endif
-
-define mkfs.ufs1
-  sh -c 'makefs -t ffs -T $(SOURCE_DATE_EPOCH) -s $(MFSROOT_LIMIT) -f 3000 -o minfree=0,version=1 $$0 ${TREE}'
-endef
-
 define e2fsck
   e2fsck -fy
 endef
@@ -428,6 +414,9 @@ endif
 		rm -vf "$(TREE)/sbin/$$exec"; \
 	done
 
+	# This is needed even when all files are moved as it also installs the
+	# aliasing symbolic links that base-files would install if there was a
+	# base-files udeb.
 	merge-usr "$(TREE)"
 
 ifeq ($(DEB_HOST_ARCH_OS),linux)
@@ -476,7 +465,7 @@ ifneq (,$(filter $(ARCH),amd64 arm64 i386))
 	if [ -e "$(DRM_DIR)/drm.ko.xz" ]; then \
 		for module in $(DRM_MODULES); do \
 			mkdir -p $(TREE)$(DRM_DIR)/$$(dirname $$module); \
-			cp $(DRM_DIR)/$$module.xz $(TREE)$(DRM_DIR)/$$module; \
+			cp $(DRM_DIR)/$$module.xz $(TREE)$(DRM_DIR)/$$module.xz; \
 		done; \
 	fi
 endif
@@ -793,10 +782,6 @@ endif
 	;; \
 	jffs2) \
 		$(mkjffs2) $(TEMP_INITRD); \
-	;; \
-	ufs1) \
-		$(mkfs.ufs1) $(TEMP)/initrd; \
-		$(gzip) -v9f $(TEMP)/initrd; \
 	;; \
 	*) \
 		echo "Unsupported filesystem type"; \
