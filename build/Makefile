@@ -57,7 +57,7 @@
 export MTOOLS_SKIP_CHECK=1
 
 # Temporary workaround for #1036019:
-export DRM_DIR := /lib/modules/$(KERNELVERSION)/kernel/drivers/gpu/drm
+export DRM_DIR := /usr/lib/modules/$(KERNELVERSION)/kernel/drivers/gpu/drm
 ifndef DRM_MODULES
 export DRM_MODULES :=          \
 	drm_shmem_helper.ko    \
@@ -420,9 +420,11 @@ endif
 	merge-usr "$(TREE)"
 
 ifeq ($(DEB_HOST_ARCH_OS),linux)
+ifeq ($(filter $(DEB_HOST_ARCH),mips64el hppa sh4),)
 	# XXX: Compensate (at least temporarily) for kernel-image's now shipping
 	# a versioned vmlinuz-* instead of just vmlinuz (in sid, since 6.6.8-1);
-	# ditto for vmlinux-* on some archs (e.g. ppc64el).
+	# ditto for vmlinux-* on some archs (e.g. ppc64el). Keep it on mips64el
+	# though (see KERNELNAME variable).
 	VMLINUXZ=`find $(TREE)/boot/ -name 'vmlinu[xz]-*'`; \
 	if [ `echo "$$VMLINUXZ" | wc -w` != 1 ]; then \
 		echo "E: unexpected number of vmlinu[xz]-* in tree: $$VMLINUXZ (expected: 1)" >&2; \
@@ -431,6 +433,7 @@ ifeq ($(DEB_HOST_ARCH_OS),linux)
 		echo "I: unversioning vmlinu[xz]" >&2; \
 		mv -v $$VMLINUXZ $(TREE)/boot/`basename $$VMLINUXZ|sed 's/-.*//'`; \
 	fi
+endif
 endif
 
 	# Clean up after dpkg.
@@ -846,6 +849,13 @@ $(ROOT): $(TEMP_ROOT)
 	update-manifest $@ $(MANIFEST-ROOT) $(UDEB_LISTS)
 
 $(TEMP_ROOT): $(TEMP_INITRD) arch_root
+
+# miniature UEFI UKI with only one boot image
+$(MINIEFI): $(TEMP_MINIEFI)
+	install -p -m 644 -D $(TEMP_MINIEFI) $@
+	update-manifest $@ $(MANIFEST-MINIEFI) $(UDEB_LISTS)
+
+$(TEMP_MINIEFI): $(TEMP_BOOT_SCREENS) arch_miniefi
 
 # miniature ISOs with only a boot image
 $(MINIISO): $(TEMP_MINIISO)
