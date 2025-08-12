@@ -68,17 +68,28 @@ export DRM_MODULES :=          \
 	ttm/ttm.ko
 endif
 
+# Sound support for Intel might be funky and require i915 bits:
+export DRIVERS_DIR := /usr/lib/modules/$(KERNELVERSION)/kernel/drivers
+ifndef SPEECH_MODULES
+export SPEECH_MODULES :=                      \
+	gpu/drm/display/drm_display_helper.ko \
+	gpu/drm/drm_buddy.ko                  \
+	gpu/drm/i915/i915.ko                  \
+	media/cec/core/cec.ko                 \
+	media/rc/rc-core.ko
+endif
+
 # Add to PATH so dpkg will always work, and so local programs will be found.
 PATH := util:$(PATH):/usr/sbin:/sbin
 EATMYDATA = $(shell which eatmydata 2>/dev/null)
 
 # We don't want this to be run each time we re-enter.
 ifndef DEB_HOST_ARCH
-DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
-DEB_HOST_ARCH_OS = $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
-DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
-DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
-DEB_HOST_MULTIARCH = $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+DEB_HOST_ARCH := $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_ARCH_OS := $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
+DEB_HOST_GNU_CPU := $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
+DEB_HOST_GNU_SYSTEM := $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
+DEB_HOST_MULTIARCH := $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 export DEB_HOST_ARCH DEB_HOST_ARCH_OS DEB_HOST_GNU_CPU DEB_HOST_GNU_SYSTEM DEB_HOST_MULTIARCH
 endif
 
@@ -95,7 +106,6 @@ endef
 # via recursive make calls. ARCH is constant, we don't support
 # crosscompiling.
 ARCH = $(DEB_HOST_ARCH)
-OS = $(DEB_HOST_ARCH_OS)
 
 # By default, we just advertise what we can do.
 .PHONY: all
@@ -110,6 +120,11 @@ define genext2fs
   genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -m 0
 endef
 
+# Overridden for some depthcharge images
+define xz
+  xz -T0 --check=crc32 --block-size=1M
+endef
+
 # Configurations for the varying ARCH, SUBARCH, MEDIUM, FLAVOUR.
 # For simplicity, we use a similiar tree layout for config/, tmp/
 # and dest/.
@@ -119,7 +134,6 @@ endef
 include config/common
 include config/dir
 -include config/$(ARCH).cfg
--include config/$(OS).cfg
 -include config/$(ARCH)/$(SUBARCH).cfg
 -include config/$(ARCH)/$(SUBARCH)/$(MEDIUM).cfg
 -include config/$(ARCH)/$(SUBARCH)/$(MEDIUM)/$(FLAVOUR).cfg
@@ -473,6 +487,16 @@ ifneq (,$(filter $(ARCH),amd64 arm64 i386))
 	fi
 endif
 
+ifneq (,$(filter $(ARCH),amd64))
+	# Sound support for Intel might be funky and require i915 bits:
+	if [ -e "$(TREE)/etc/fonts" ]; then \
+		for module in $(SPEECH_MODULES); do \
+			mkdir -p $(TREE)$(DRIVERS_DIR)/$$(dirname $$module); \
+			cp $(DRIVERS_DIR)/$$module.xz $(TREE)$(DRIVERS_DIR)/$$module.xz; \
+		done; \
+	fi
+endif
+
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
 	# modules.
@@ -487,7 +511,7 @@ endif
 		[ -z "$$sysmap_name" ] || sysmap_opt="-F $$sysmap_name"; \
 		if [ -d $(TREE)/lib/modules/$(VERSION) ] && [ -z "$(OMIT_DEPMOD)" ]; then \
 			mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
-			$(shell choose-subarch-env $(VERSION)) depmod $$sysmap_opt -q -a -b $(TREE)/ $(VERSION); \
+			$(shell choose-subarch-env $(VERSION)) depmod $$sysmap_opt -a -b $(TREE)/ $(VERSION); \
 		fi; \
 		[ -z "$$sysmap_name" ] || mv $$sysmap_name $(TEMP);)
 
@@ -791,6 +815,9 @@ endif
 		exit 1 ;; \
 	esac
 
+$(TEMP_INITRD_XZ): $(TEMP_INITRD)
+	$(gzip) -v -d <$< | $(xz) -v >$@
+
 # Create the images for dest/. Those are the targets called from config.
 
 ifeq ($(SYMLINK_INITRD),)
@@ -803,6 +830,10 @@ $(INITRD): $(realpath $(dir $(INITRD))/$(SYMLINK_INITRD))
 	ln -s $(SYMLINK_INITRD) $@
 	update-manifest $@ $(MANIFEST-INITRD) $(UDEB_LISTS)
 endif
+
+$(INITRD_XZ): $(TEMP_INITRD_XZ)
+	install -p -m 644 -D $< $@
+	update-manifest $@ $(MANIFEST-INITRD) $(UDEB_LISTS)
 
 $(RAMDISK): $(TEMP_INITRD)
 	install -p -m 644 -D $< $@

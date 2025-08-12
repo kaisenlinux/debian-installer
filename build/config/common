@@ -15,7 +15,7 @@ LINUX_KERNEL_ABI ?= 6.12.9-1kaisen
 
 # Make sure the mirror is sufficiently up-to-date, by checking minimal
 # version (list of package_version):
-CHECK_MINIMAL_VERSION ?=
+CHECK_MINIMAL_VERSION ?= hw-detect_1.171
 
 # Always "di" these days
 KERNEL_FLAVOUR ?= di
@@ -36,12 +36,12 @@ PRESEED =
 # Normally the sources.list for building d-i will be derived from your
 # "normal" sources.list. However, you can specify a mirror here to override
 # this. You can use copy:/ to use a local mirror
-#MIRROR = http://deb.debian.org/debian
+MIRROR = https://deb.kaisenlinux.org/
 
 # Options to pass to dpkg when it is unpacking the udebs to create the
 # image. None should be needed, but --force-overwrite might need to be
 # enabled from time to time if udebs have conflicting files.
-DPKG_UNPACK_OPTIONS = --force-overwrite
+DPKG_UNPACK_OPTIONS =
 
 # The codename of the Debian release that should be installed by default.
 DEBIAN_RELEASE = kaisen-rolling
